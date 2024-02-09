@@ -6,8 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    
     "splash": {
-      "image": "./src/assets/logo.png",
+      "image": "./assets/Splash-Screen.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -27,7 +28,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      [
+        "expo-font",
+        {
+          "fonts": ["node_modules/@expo-google-fonts/montserrat"],
+          "fonts": ["node_modules/@expo-google-fonts/quicksand"],
+          "fonts": ["node_modules/@expo-google-fonts/montserrat-alternates"]
+        }
+      ]
     ]
   }
 }

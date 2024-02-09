@@ -1,10 +1,13 @@
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Logo = styled.Image`
-    width: 214px;
-    height: 120px;
-
-     align-Items: center;
-     margin: 20px 0px;
-
+  align-items: center;
+  height: 120px;
+  margin: 20px 0px;
+  width: 214px;
 `
+export const Image = styled(Logo)`
+  height: 280px; 
+  width: 400px;  
+  margin-top: 0px;
+  `
