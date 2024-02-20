@@ -3,7 +3,7 @@ import { Navigation } from "./src/screens/Navigation/Navigation";
 import { Login } from "./src/screens/Login";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useFonts, MontserratAlternates_600SemiBold, MontserratAlternates_500Medium, MontserratAlternates_700Bold } from '@expo-google-fonts/montserrat-alternates';
+import { useFonts, MontserratAlternates_600SemiBold, MontserratAlternates_500Medium, MontserratAlternates_700Bold, Quicksand_400Regular, Quickand_600SemiBold } from '@expo-google-fonts/montserrat-alternates';
 import { Quicksand_500Medium } from '@expo-google-fonts/quicksand';
 
 
@@ -12,6 +12,7 @@ import { Verification } from "./src/screens/Verification/Verification";
 import { CreateAccount } from "./src/screens/CreateAccount/CreateAccount";
 import { Redefinir } from "./src/screens/Redefinir/Redefinir";
 import { Perfil } from "./src/screens/Perfil/Perfil";
+import { Home } from "./src/screens/Home/Home";
 
 //  Instancia do StackNavigator
 const Stack = createNativeStackNavigator();
@@ -22,8 +23,9 @@ export default function App() {
     MontserratAlternates_600SemiBold,
     MontserratAlternates_500Medium,
     MontserratAlternates_700Bold,
-    Quicksand_500Medium
-
+    Quicksand_500Medium,
+    Quicksand_400Regular,
+    Quickand_600SemiBold
   });
 
   if (!fontsLoaded && !fontError) {
@@ -102,6 +104,16 @@ export default function App() {
           component={CreateAccount}
           //  Título da tela
           options={{ title: 'Criar Conta' }}
+        />
+
+
+           <Stack.Screen
+          //  Nome da tela
+          name='Home'
+          //  Componente que será chamdo
+          component={Home}
+          //  Título da tela
+          options={{ title: 'Home' }}
         />
 
 
