@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState, useRef } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 
@@ -7,36 +7,86 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import {
   requestForegroundPermissionsAsync,  //solicita o acesso a localizacao
-  getCurrentPositionAsync //Recebe a localizacao atual
+  getCurrentPositionAsync, //Recebe a localizacao atual
+
+  watchPositionAsync,
+  LocationAccuracy
 } from 'expo-location'
 
-import { useEffect, useState } from 'react';
+
 
 import MapViewDirections from 'react-native-maps-directions';
 
 import { mapskey } from './utils/mapsApiKey';
 
 export default function App() {
-  const [initialPosition, setIncialPosition] = useState(null)
+  const mapReference = useRef(null);
+
+  const [initialPosition, setIncialPosition] = useState(null);
+
+  const [finalPosition, setFinalPosition] = useState({
+    latitude: -23.206,
+    longitude: -46.7836
+  })
 
   async function CapturarLocalizacao() {
+
     const { granted } = await requestForegroundPermissionsAsync()
-    console.log(granted);
 
     if (granted) {
+
       const CapturarLocation = await getCurrentPositionAsync() //obtem a localizacao atual
+
+      console.log("aqui localizacao");
+      console.log(CapturarLocation);
 
       setIncialPosition(CapturarLocation)
 
       console.log(initialPosition)
     }
-    console.log(granted)
   }
 
   useEffect(() => {
+
     CapturarLocalizacao()
+
+    // //Monitora em tempo real
+    // watchPositionAsync({
+    //   accuracy: LocationAccuracy.Highest,
+    //   timeInterval: 1000,
+    //   distanceInterval: 1,
+
+    // }, async (response) => {
+    //   //recebe e guarda a nova localizacao
+    //   await setFinalPosition(response)
+
+    //   mapReference.current?.animateCamera({
+    //     pitch: 60,
+    //     center: response.coords
+    //   })
+
+    //   console.log(response)
+    // })
   }, [1000])
 
+  useEffect(() => {
+    RecarregarVisualizacaoMapa()
+  }, [initialPosition])
+
+  async function RecarregarVisualizacaoMapa() {
+    if (mapReference.current && initialPosition) {
+      await mapReference.current.fitToCoordinates(
+        [
+          { latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude },
+          { latitude: finalPosition.latitude, longitude: finalPosition.longitude }
+        ],
+        {
+          edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
+          animated: true
+        }
+      )
+    }
+  }
   return (
     <View style={styles.container}>
       {
@@ -44,6 +94,8 @@ export default function App() {
           ? (
 
             <MapView
+
+              ref={mapReference}
               // marca o ponto de inicio de visualizacao
               initialRegion={{
                 latitude: initialPosition.coords.latitude,
@@ -64,22 +116,22 @@ export default function App() {
                 description='Estou aqui'
                 pinColor={'blue'}
               />
-           <MapViewDirections
-              origin={ initialPosition.coords }
-              destination={{
-                latitude: -23.5329,
-                longitude: -46.7926,
-                latitudeDelta: 0.005,
-                longitudeDelta: 0.005
-              }}
-              strokeWidth={5}
-              strokeColor='#496bba'
-              apikey={mapskey}
-           />
+              <MapViewDirections
+                origin={initialPosition.coords}
+                destination={{
+                  latitude: -23.5329,
+                  longitude: -46.7926,
+                  latitudeDelta: 0.005,
+                  longitudeDelta: 0.005
+                }}
+                strokeWidth={5}
+                strokeColor='#496bba'
+                apikey={mapskey}
+              />
               <Marker
                 coordinate={{
                   latitude: -23.5329,
-                  longitude:-46.7926
+                  longitude: -46.7926
                 }}
                 title='Posicao inicial'
                 description='Estou aqui'
